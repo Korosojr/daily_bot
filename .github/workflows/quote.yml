@@ -1,1 +1,20 @@
+name: Daily Quote Bot
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # Runs every day at 9 AM UTC
+
+jobs:
+  post-quote:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Quote from API
+        run: curl https://api.quotable.io/random > quote.json
+
+      - name: Post Quote as Issue
+        uses: peter-evans/create-issue-from-file@v4
+        with:
+          title: "Daily Quote"
+          content-filepath: quote.json
+          token: ${{ secrets.GITHUB_TOKEN }}
 
